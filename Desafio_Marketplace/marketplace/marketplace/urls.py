@@ -19,5 +19,8 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('produtos/', include('produtos.urls'))
+    # o 'api/' é utilizado por padrão nas APIs REST
+    path('api/', include('produtos.urls')),
+
+    path('api/', include('pedidos.urls')),
 ]
