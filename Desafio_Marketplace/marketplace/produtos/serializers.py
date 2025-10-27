@@ -7,4 +7,4 @@ class ProdutoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Produto
         # sempre colocar o campo de ID pois o django cria um automaticamente
-        fields = ['id', 'nome', 'preco', 'estoque', 'descricao']
+        fields = ['id', 'nome', 'preco', 'estoque', 'descricao', 'ativo']

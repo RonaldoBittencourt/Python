@@ -38,7 +38,6 @@ class PedidoRetrieveView(generics.RetrieveAPIView):
     serializer_class = PedidoSerializer
 
 # view para atualizar o status do pedido
-#TODO: descobrir como bloquear o PUT e deixar apenas PATCH
 class PedidoStatusUpdateView(generics.UpdateAPIView):
     queryset = Pedido.objects.all()
     serializer_class = PedidoStatusUpdateSerializer

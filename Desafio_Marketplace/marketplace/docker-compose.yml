@@ -1,0 +1,15 @@
+# definindo quais containers rodar
+services:
+
+  # construindo o container principal
+  web:
+    # construindo a imagem
+    build: .
+
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    # sincronizando a pasta local com a do container
+    volumes:
+      - .:/app
+    # mapeando a porta local com a do container
+    ports:
+      - "8000:8000"

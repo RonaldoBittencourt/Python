@@ -3,7 +3,6 @@ from . import views
 
 urlpatterns = [
     # URL para o GET e o POST
-    #TODO: aprender postman para conseguir visualizar a tabela de itens para criar o pedido
     path('pedidos/', views.PedidoListCreateView.as_view(), name='pedido-list-create'),
 
     # URL para o GET

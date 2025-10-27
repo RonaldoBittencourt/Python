@@ -1,21 +1,14 @@
 from rest_framework import serializers
+from django.db import transaction
 from .models import Pedido, ItensPedido
 from produtos.models import Produto
 
-# um pedido deve:
-#TODO: receber uma lista de produtos e quantidade
-#TODO: verificar o preço de cada produto
-#TODO: realizar o calculo do subtotal de cada item
-#TODO: realizar o calculo do total de todo pedido
-#TODO: verificar o estoque
-#TODO: (opcional) atualizar o estoque ao confirmar o pedido
-#TODO: ter o status atualizado pelo admin (outra view talvez)
 
 # serializers para leitura
 class ItensPedidoSerializer(serializers.ModelSerializer):
     class Meta:
         model = ItensPedido
-        fields = ['id', 'produto', 'quantidade', 'subtotal']
+        fields = ['id', 'produto', 'quantidade', 'subtotal', 'ativo']
 
 class PedidoSerializer(serializers.ModelSerializer):
     # recebendo o serializer de cima para usar ele apenas para leitura
@@ -46,34 +39,51 @@ class PedidoCreateSerializer(serializers.ModelSerializer):
         fields = ['nome_cliente', 'email_cliente', 'itens']
     
     # metodo para criar os pedidos
-    #TODO: pensar em validação da quantidade do estoque antes de fazer o pedido
     def create(self, validated_data):
-        itens_data = validated_data.pop('itens')
-        # criando o pedido com o operador **
-        pedido = Pedido.objects.create(**validated_data)
-        valor_total_pedido = 0
+        with transaction.atomic():
+            itens_data = validated_data.pop('itens')
+            # criando o pedido com o operador **
+            pedido = Pedido.objects.create(**validated_data)
+            valor_total_pedido = 0
 
-        # criando loop para processar todos os dados
-        for item_data in itens_data:
-            produto = item_data['produto']
-            quantidade = item_data['quantidade']
+            # criando loop para processar todos os dados
+            for item_data in itens_data:
+                produto = item_data['produto']
+                quantidade = item_data['quantidade']
 
-            subtotal = produto.preco * quantidade
-            # incrementa o subtotal no valor total do pedido
-            valor_total_pedido += subtotal
+                # verificando se o produto está sendo vendido ou não
+                if not produto.ativo:
+                    raise serializers.ValidationError(
+                        f"O produto '{produto.nome}' não está mais sendo vendido"
+                    )
 
-            # criando o objeto de cada item no banco
-            ItensPedido.objects.create(
-                pedido=pedido,
-                produto=produto,
-                quantidade=quantidade,
-                subtotal=subtotal
-            )
+
+                # verificando o estoque do produto
+                if produto.estoque < quantidade:
+                    raise serializers.ValidationError(
+                        f"Estoque do produto '{produto.nome}' é insuficiente"
+                    )
+
+                subtotal = produto.preco * quantidade
+                # incrementa o subtotal no valor total do pedido
+                valor_total_pedido += subtotal
+
+                # criando o objeto de cada item no banco
+                ItensPedido.objects.create(
+                    pedido=pedido,
+                    produto=produto,
+                    quantidade=quantidade,
+                    subtotal=subtotal
+                )
+
+                # atualizando o estoque e salvando no banco
+                produto.estoque -= quantidade
+                produto.save()
 
             # atualizando o pedido com o calculo total do valor
             pedido.valor_total = valor_total_pedido
             pedido.save()
-        return pedido
+            return pedido
     
 # serializer separado para mudar o status do pedido
 # acessível apenas pelo admin

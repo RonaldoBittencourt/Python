@@ -21,12 +21,12 @@ def main():
 if __name__ == '__main__':
     main()
 
-#TODO: entender como django funciona
 
 
-#TODO: CRUD de pedidos (cliente(nome, email), itens(produto, quantidade, subtotal), valor total, status)
-#TODO: endpoint para o admin atualizar o status do pedido
-#TODO: filtro de status do pedido e por clientes
+
+
+
+
 #TODO: criar uma seed inicial
-#TODO: entender e configurar docker para o projeto
+
 #TODO: verificar objetivos adicionais para o desafio
