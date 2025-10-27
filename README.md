@@ -53,3 +53,11 @@
 * Detalhar um pedido: **GET '/api/pedidos/'id'/'**
 
 * Atualizar o status de um pedido (admin): **PATCH '/api/pedidos/'id'/status/'**
+
+### Swagger:
+
+* Baixar o schema: **'api/schema/'**
+
+* Acessar o Swagger: **api/docs/**
+
+* Acessar o Swagger simplificado: **api/redoc/**
