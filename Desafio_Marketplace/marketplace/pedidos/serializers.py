@@ -8,7 +8,7 @@ from produtos.models import Produto
 class ItensPedidoSerializer(serializers.ModelSerializer):
     class Meta:
         model = ItensPedido
-        fields = ['id', 'produto', 'quantidade', 'subtotal', 'ativo']
+        fields = ['id', 'produto', 'quantidade', 'subtotal']
 
 class PedidoSerializer(serializers.ModelSerializer):
     # recebendo o serializer de cima para usar ele apenas para leitura

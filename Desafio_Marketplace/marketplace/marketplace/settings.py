@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     # Rest framework deve ser colocado manualmente
     'rest_framework',
 
+    # Biblioteca para o Swagger
+    'drf_spectacular',
+
     # Apps criados para o projeto
     'produtos',
     'pedidos',
@@ -127,3 +130,18 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    # Informando ao DRF para usar o drf-spectacular
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    # Configuração de apresentação
+    'TITLE': 'API Desafio Marketplace',
+    'DESCRIPTION': 'API para gerenciar produtos e pedidos de um e-commerce.',
+    'VERSION': '1.0.0',
+    
+    # Configuração para ele entender meu GET e POST separados.
+    'COMPONENT_SPLIT_REQUEST': True,
+}
