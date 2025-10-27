@@ -2,17 +2,19 @@
 
 1.  Faça um clone deste repositório:
 ```
-	bash
     git clone https://github.com/RonaldoBittencourt/Python.git
 ```
-
-2.  Suba os containers usando o Docker Compose.
+2. Entre na pasta do projeto:
 ```
-	bash
+    cd Python\Desafio_Marketplace\marketplace
+```
+
+3.  Suba os containers usando o Docker Compose.
+```
     docker-compose up --build
 ```
 
-### "O servidor estará rodando em 'http://localhost:8000/'."
+### "O servidor estará rodando em 'http://localhost:8000/api/docs/'."
 
 # Decisões Técnicas:
 
